@@ -4,9 +4,8 @@ resource "google_storage_bucket" "insecure_bucket" {
   location = "US"
 }
 
-# Make the password object public
-resource "google_storage_object_access_control" "public_object" {
-  object = google_storage_bucket_object.password.name
+# 5.5.3 Ensure That Cloud Storage Bucket Is Not Anonymously or Publicly Accessible
+resource "google_storage_bucket_access_control" "public_object" {
   bucket = google_storage_bucket.insecure_bucket.name
   role   = "READER"
   entity = "allUsers"
