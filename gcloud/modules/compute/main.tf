@@ -23,6 +23,13 @@ resource "google_compute_instance" "insecure_vm" {
   }
 }
 
+# 1.8.2	Ensure Oslogin Is Enabled for a Project
+# resource "google_compute_project_metadata" "default" {
+#   metadata = {
+#     enable-oslogin = "TRUE"
+#   }
+# }
+
 # 1.7.1 Ensure 'Enable Connecting to Serial Ports' Is Not Enabled for VM Instance
 data "google_compute_instance_serial_port" "serial" {
   instance = google_compute_instance.insecure_vm.name

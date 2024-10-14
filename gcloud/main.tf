@@ -1,6 +1,6 @@
-module "compute" {
-  source = "./modules/compute"
-}
+# module "compute" {
+#   source = "./modules/compute"
+# }
 
 # module "database" {
 #   source = "./modules/database"
@@ -14,3 +14,12 @@ module "compute" {
 # module "storage" {
 #   source = "./modules/storage"
 # }
+
+# module "kms" {
+#   source = "./modules/kms"
+# }
+
+module "iam" {
+  source = "./modules/iam"
+  project = var.project
+}
