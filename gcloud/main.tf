@@ -19,7 +19,15 @@
 #   source = "./modules/kms"
 # }
 
-module "iam" {
-  source = "./modules/iam"
-  project = var.project
+# module "iam" {
+#   source  = "./modules/iam"
+#   project = var.project
+# }
+
+# module "networking" {
+#   source = "./modules/networking"
+# }
+
+module "dns" {
+  source = "./modules/dns"
 }
