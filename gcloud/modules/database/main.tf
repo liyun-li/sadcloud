@@ -19,48 +19,6 @@ resource "google_sql_database_instance" "insecure_mysql_instance" {
   }
 }
 
-resource "google_sql_database_instance" "insecure_sqlserver_instance" {
-  name             = "insecure_sqlserver-instance"
-  database_version = "SQLSERVER_2019_STANDARD"
-  settings {
-    tier = "db-f1-micro"
-
-    # https://cloud.google.com/sql/docs/sqlserver/flags
-    # 6.2.1 Ensure 'external scripts enabled' database flag for Cloud SQL SQL Server instance is set to 'off'
-    database_flags {
-      name  = "external scripts enabled"
-      value = "on"
-    }
-    # 6.5.5 Ensure that the 'cross db ownership chaining' database flag for Cloud SQL SQL Server instance is set to 'off'
-    database_flags {
-      name  = "cross db ownership chaining"
-      value = "on"
-    }
-    # 6.5.6 Ensure that the 'contained database authentication' database flag for Cloud SQL on the SQL Server instance is set to 'off'
-    database_flags {
-      name  = "contained database authentication"
-      value = "on"
-    }
-    # 6.6.1 Ensure 'user options' database flag for Cloud SQL SQL Server instance is not configured
-    # https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/configure-the-user-options-server-configuration-option
-    database_flags {
-      name  = "user options"
-      value = 513 # NOCOUNT (512) + DISABLE_DEF_CNST_CHK (1)
-    }
-    # 6.6.2 Ensure '3625 (trace flag)' database flag for all Cloud SQL Server instances is set to 'on'
-    database_flags {
-      name  = "3625 (trace flag)"
-      value = "off"
-    }
-    # 6.6.2 Ensure 'remote access' database flag for Cloud SQL SQL Server instance is set to 'off'
-    database_flags {
-      name  = "remote access"
-      value = "on"
-    }
-  }
-  deletion_protection = false
-}
-
 resource "google_sql_database_instance" "insecure_postgres_instance" {
   name                = "insecure-postgres-database"
   database_version    = "POSTGRES_9_6"
@@ -99,6 +57,50 @@ resource "google_sql_database_instance" "insecure_postgres_instance" {
       value = "off"
     }
   }
+}
+
+resource "google_sql_database_instance" "insecure_sqlserver_instance" {
+  name             = "insecure-sqlserver-instance"
+  database_version = "SQLSERVER_2019_STANDARD"
+  root_password    = "INSERT-PASSWORD-HERE"
+
+  settings {
+    tier = "db-custom-2-7680"
+
+    # https://cloud.google.com/sql/docs/sqlserver/flags
+    # 6.2.1 Ensure 'external scripts enabled' database flag for Cloud SQL SQL Server instance is set to 'off'
+    database_flags {
+      name  = "external scripts enabled"
+      value = "on"
+    }
+    # 6.5.5 Ensure that the 'cross db ownership chaining' database flag for Cloud SQL SQL Server instance is set to 'off' (deprecated)
+    # database_flags {
+    #   name  = "cross db ownership chaining"
+    #   value = "on"
+    # }
+    # 6.5.6 Ensure that the 'contained database authentication' database flag for Cloud SQL on the SQL Server instance is set to 'off'
+    database_flags {
+      name  = "contained database authentication"
+      value = "on"
+    }
+    # 6.6.1 Ensure 'user options' database flag for Cloud SQL SQL Server instance is not configured
+    # https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/configure-the-user-options-server-configuration-option
+    database_flags {
+      name  = "user options"
+      value = 513 # NOCOUNT (512) + DISABLE_DEF_CNST_CHK (1)
+    }
+    # 6.6.2 Ensure '3625 (trace flag)' database flag for all Cloud SQL Server instances is set to 'on'
+    database_flags {
+      name  = "3625"
+      value = "off"
+    }
+    # 6.6.2 Ensure 'remote access' database flag for Cloud SQL SQL Server instance is set to 'off'
+    database_flags {
+      name  = "remote access"
+      value = "on"
+    }
+  }
+  deletion_protection = false
 }
 
 # 6.3.4 Ensure That the Cloud SQL Database Instance Requires All Incoming Connections To Use SSL
