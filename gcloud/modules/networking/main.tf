@@ -15,6 +15,7 @@ resource "google_compute_firewall" "insecure-firewall" {
   source_ranges = ["0.0.0.0/0"]
 }
 
+# 4.1.1 Ensure No HTTPS or SSL Proxy Load Balancers Permit SSL Policies With Weak Cipher Suites
 resource "google_compute_ssl_policy" "insecure_ssl_policy" {
   name = "insecure-ssl-policy"
   # default minimum TLS version is 1.0
